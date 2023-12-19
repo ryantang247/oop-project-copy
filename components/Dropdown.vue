@@ -1,58 +1,45 @@
 <template>
   <div class="">
     <label :for="id" class="block text-gray-700 font-bold">{{ label }}</label>
-      <label for="building" class="block text-gray-700 font-bold">Select a location:</label>
-        <Slider @option-selected="handleChange" :images="optionsTree"/>
-    <div v-if="selectedOption" class="space-y-4 form-select">
+      <label class="block text-gray-700 font-bold">Select a location:</label>
+        <SliderCust @option-selected="handleChange" :images="optionsTree" @reset-options="resetOptions"/>
+    <div v-if="selectedZone" class="space-y-4 form-select">
       <label for="building" class="block text-gray-700 font-bold">Select a building:</label>
       <el-select v-model="selectedOption2" value-key="id" id="selectOption" placeholder="Select building">
         <el-option
-          v-for="option in optionsTree[selectedOption-1].Building"
-          :key="option.label"
-          :label="option.label"
-          :value="option.value"
+          v-for="option in Object.keys(hierarchicalData[selectedZone])"
+          :key="option"
+          :value="option"
         />
       </el-select>
-<!--      <select v-model="selectedOption2" id="selectOption">-->
-<!--        <option v-for="option in optionsTree[selectedOption-1].Building" :key="option.label" :value="option.value">{{ option.label }}</option>-->
-<!--      </select>-->
     </div>
-    <div v-if="selectedOption && selectedOption2" class="space-y-4 form-select">
+    <div v-if="selectedZone && selectedOption2" class="space-y-4 form-select">
       <label for="building" class="block text-gray-700 font-bold">Select a Floor:</label>
       <el-select v-model="selectedOption3" id="selectOption2" value-key="id" placeholder="Select Floor">
         <el-option
-          v-for="option in optionsTree[selectedOption-1].Building[selectedOption2-1].Floors"
-          :key="option.label"
-          :label="option.label"
-          :value="option.value"
+          v-for="option in Object.keys(hierarchicalData[selectedZone][selectedOption2])"
+          :key="option"
+          :value="option"
         />
       </el-select>
-<!--      <select v-model="selectedOption3" id="selectOption2">-->
-<!--        <option-->
-<!--          class ="options-style"-->
-<!--          v-for="option in optionsTree[selectedOption-1].Building[selectedOption2-1].Floors"-->
-<!--          :key="option.label" :value="option.value">{{ option.label }}</option>-->
-<!--      </select>-->
     </div>
-    <div v-if="selectedOption && selectedOption2 && selectedOption3" class="space-y-4 form-select">
-      <label for="building" class="block text-gray-700 font-bold">Select a Room:</label>
+    <div v-if="selectedZone && selectedOption2 && selectedOption3" class="space-y-4 form-select">
+      <label class="block text-gray-700 font-bold">Select a Room:</label>
 
       <div class="" v-if="selectedOption4 === null">
-<!--        <ul class="custom-list" >-->
 
-<!--          <li class="list-item" v-for="item in RoomArr" :key="item.roomNumber" @click="selectRoom(item.roomNumber)">-->
             <el-row>
             <el-col
               v-for="item in RoomArr"
               :key="item.roomNumber"
               :span="8"
-              @click="selectRoom(item.roomNumber)"
+
             >
-            <el-card class="box-card">
-              <img :src="item.roomType.image" class="list-image" />
+            <el-card @click.native="selectRoom(item.id)" class="box-card" >
+              <img :src="getImageSrc(item.type)" class="list-image" />
               <div class="list-description">
                 <h3>{{ item.roomNumber }}</h3>
-                <p>{{ item.roomType.label }}</p>
+                <p>{{ handleWord(item.type) }}</p>
               </div>
             </el-card>
             </el-col>
@@ -62,9 +49,9 @@
       </div>
       <div v-else class="el-row">
         <el-col :span="4">
-          <p>{{ selectedOption4 }}</p>
+          <p>{{ selectedOption4.roomNumber }}</p>
         </el-col>
-        <el-col :span="20" class="custom-right">
+        <el-col :span="20" class="right-room">
           <button @click="resetSelection">Change Selection</button>
         </el-col>
       </div>
@@ -75,332 +62,77 @@
 
 
 <script>
+import data from '@/static/data.json';
+import SliderCust from "@/components/SliderCust.vue";
 export default {
+  components: {SliderCust},
+
   option1: 0,
   props: {
     id: String, // ID for the dropdown element
     label: String, // Label for the dropdown
     options: Array, // Array of options [{ label: 'Label', value: 'Value' }]
+    hierarchicalData: {
+      type: Array,
+      required: true
+    },
   },
   watch: {
-    selectedOption: 'emitSelectedOptions',
+    selectedZone: 'emitSelectedOptions',
     selectedOption2: 'emitSelectedOptions',
     selectedOption3: 'emitSelectedOptions',
     selectedOption4: 'emitSelectedOptions',
   },
   data() {
 
-    //During refresh, dummy data route may change to /Dorm/sustech/.... , hence returning 404
-    const roomTypes = {
-      single: {
-        label: 'Single Room',
-        image: './dorm/dorm1.jpg',
-      },
-      double: {
-        label: 'Double Room',
-        image: './dorm/dorm2.jpg',
-      },
-      quad: {
-        label: 'Suite',
-        image: './dorm/dorm3.jpg',
-      },
-    };
-
     return {
 
-      optionsTree: [
-        {
-          label: "Residential College",
-          url: "./sustech/lakeside_dorm.jpg",
-          value: 1,
-          Building: [
-            {
-              label: "B1",
-              value: 1,
-              Floors: [
-                {
-                  label: "F1",
-                  value: 1,
-                  Room: [
-                    {
-                      roomNumber: 101,
-                      roomType: roomTypes.single,
-                    },
-                    {
-                      roomNumber: 102,
-                      roomType: roomTypes.double,
-                    },
-                    {
-                      roomNumber: 130,
-                      roomType: roomTypes.quad,
-                    },
-                    {
-                      roomNumber: 135,
-                      roomType: roomTypes.quad,
-                    },
-                  ],
-                },
-                {
-                  label: "F2",
-                  value: 2,
-                  Room: [
-                    {
-                      roomNumber: 201,
-                      roomType: roomTypes.single,
-                    },
-                    {
-                      roomNumber: 204,
-                      roomType: roomTypes.quad,
-                    },
-                  ],
-                },
-              ],
-            },
-            {
-              label: "B2",
-              value: 2,
-              Floors: [
-                {
-                  label: "F1",
-                  value: 1,
-                  Room: [
-                    {
-                      roomNumber: 101,
-                      roomType: roomTypes.single,
-                    },
-                    {
-                      roomNumber: 111,
-                      roomType: roomTypes.double,
-                    },
-                    {
-                      roomNumber: 112,
-                      roomType: roomTypes.double,
-                    },
-                  ],
-                },
-                {
-                  label: "F2",
-                  value: 2,
-                  Room: [
-                    {
-                      roomNumber: 201,
-                      roomType: roomTypes.single,
-                    },
-                    {
-                      roomNumber: 209,
-                      roomType: roomTypes.single,
-                    },
-                    {
-                      roomNumber: 212,
-                      roomType: roomTypes.quad,
-                    },
-                  ],
-                },
-              ],
-            },
-            {
-              label: "B3",
-              value: 3,
-              Floors: [
-                {
-                  label: "F1",
-                  value: 1,
-                  Room: [
-                    {
-                      roomNumber: 201,
-                      roomType: roomTypes.single,
-                    },
-                    {
-                      roomNumber: 209,
-                      roomType: roomTypes.single,
-                    },
-                    {
-                      roomNumber: 212,
-                      roomType: roomTypes.quad,
-                    },
-                  ],
-                },
-              ],
-            },
-            {
-              label: "B4",
-              value: 4,
-              Floors: [
-                {
-                  label: "F1",
-                  value: '1',
-                  Room: [
-                    {
-                      roomNumber: 201,
-                      roomType: roomTypes.single,
-                    },
-                    {
-                      roomNumber: 209,
-                      roomType: roomTypes.single,
-                    },
-                    {
-                      roomNumber: 212,
-                      roomType: roomTypes.quad,
-                    },
-                  ],
-                },
-                {
-                  label: "F2",
-                  value: 2,
-                  Room: [
-                    {
-                      roomNumber: 201,
-                      roomType: roomTypes.single,
-                    },
-                    {
-                      roomNumber: 209,
-                      roomType: roomTypes.single,
-                    },
-                    {
-                      roomNumber: 212,
-                      roomType: roomTypes.quad,
-                    },
-                  ],
-                },
-                {
-                  label: "F2",
-                  value: 3,
-                  Room: [
-                    {
-                      roomNumber: 212,
-                      roomType: roomTypes.quad,
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-        },
-        {
-          label: "Lychee Hills",
-          url: "./sustech/lychee.jpg",
-          value: 2,
-          Building: [
-            {
-              label: "B1",
-              value: 1,
-              Floors: [
-                {
-                  label: "F1",
-                  value: 1,
-                  Room: [
-                    {
-                      roomNumber: 1,
-                      roomType: roomTypes.single,
-                    },
-                    {
-                      roomNumber: 2,
-                      roomType: roomTypes.single,
-                    },
-                    {
-                      roomNumber: 3,
-                      roomType: roomTypes.single,
-                    },
-                    {
-                      roomNumber: 4,
-                      roomType: roomTypes.single,
-                    },
-                    {
-                      roomNumber: 5,
-                      roomType: roomTypes.single,
-                    },
-                    {
-                      roomNumber: 6,
-                      roomType: roomTypes.single,
-                    },
-                  ],
-                },
-                {
-                  label: "F2",
-                  value: 2,
-                  Room: [
-                    {
-                      roomNumber: 1,
-                      roomType: roomTypes.single,
-                    },
-                    {
-                      roomNumber: 2,
-                      roomType: roomTypes.single,
-                    },
-                    {
-                      roomNumber: 3,
-                      roomType: roomTypes.single,
-                    },
-                  ],
-                },
-              ],
-            },
-            {
-              label: "B2",
-              value: 2,
-              Floors: [
-                {
-                  label: "F1",
-                  value: 1,
-                  Room: [
-                    {
-                      roomNumber: 1,
-                      roomType: roomTypes.single,
-                    },
-                    {
-                      roomNumber: 2,
-                      roomType: roomTypes.single,
-                    },
-                    {
-                      roomNumber: 3,
-                      roomType: roomTypes.single,
-                    },
-                    {
-                      roomNumber: 4,
-                      roomType: roomTypes.single,
-                    },
-                    {
-                      roomNumber: 5,
-                      roomType: roomTypes.single,
-                    },
-                    {
-                      roomNumber: 6,
-                      roomType: roomTypes.single,
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-        },
-      ],
-
-      selectedOption: null,
+      optionsTree: data.optionsTree,
+      selectedZone: null,
       selectedOption2: null,
       selectedOption3: null,
       selectedOption4: null
     };
   },
   methods: {
+    getImageSrc(type) {
+      // Add your logic here to determine the image source based on the type
+      if (type === 'quadruple_room') {
+        return require('@/dist/dorm/dorm1.jpg');
+      } else if (type === 'single_room') {
+        return require('@/dist/dorm/dorm2.jpg');
+      }
+    },
     emitSelectedOptions() {
       this.$emit('selected-options', {
-        selectedOption: this.selectedOption,
-        selectedOption2: this.selectedOption2,
-        selectedOption3: this.selectedOption3,
-        selectedOption4: this.selectedOption4,
+        roomId: this.selectedOption4,
       });
     },
-    handleChange(option) {
-      this.selectedOption = option;
-      console.log('Selected Location:', this.selectedOption);
+    handleWord(word){
+      const words = word.split('_');
+
+      // Capitalize each word and join them back with spaces
+      return words.map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
     },
-    selectRoom(roomNumber) {
+    handleChange(option) {
+      this.selectedZone = option;
+      console.log('Contents of hierarchicalData[selectedZone]:', this.hierarchicalData[this.selectedZone]);
+      console.log('Selected Location:', this.selectedZone);
+    },
+    selectRoom(roomID) {
       // Set the selectedOption4 when a room is clicked
-      this.selectedOption4 = roomNumber;
+      console.log("roomNumber: "+ roomID)
+      this.selectedOption4 = roomID;
     },
     resetSelection: function() {
       this.selectedOption4 = null;
     },
+    resetOptions: function(){
+      this.selectedZone = null
+      this.selectedOption2 = null
+      this.selectedOption3 = null
+      this.selectedOption4 = null
+    }
 
   },
   computed: {
@@ -408,17 +140,13 @@ export default {
     //Note: does not validate empty values in each array
     //Note 2: Maybe be appliable to the previous elements
     RoomArr() {
-        return this.optionsTree[this.selectedOption - 1].Building[this.selectedOption2 - 1].Floors[this.selectedOption3 - 1].Room;
+        return this.hierarchicalData[this.selectedZone][this.selectedOption2][this.selectedOption3];
     },
   },
 };
 </script>
 
 <style>
-/* Style the form container */
-.options-style {
-
-}
 
 /* Style form labels */
 label {
@@ -455,6 +183,23 @@ label {
 
 .list-description p {
   font-size: 14px; /* Adjust font size */
+}
+
+.right-room {
+  margin-top: 8px;
+  display: flex;
+  justify-content: end; /* Align content to the far right */
+}
+
+button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 25px; /* Make it more rounded */
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s; /* Add a smooth transition for the button */
 }
 
 </style>

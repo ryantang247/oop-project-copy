@@ -7,6 +7,7 @@
   <ul>
     <li><a href="/">Home</a></li>
     <li><NuxtLink to="/Dorm">Select Dorm</NuxtLink></li>
+    <li><NuxtLink to="/ViewDorm">View Dorm</NuxtLink></li>
     <li><a href="/Contact">Contact</a></li>
     <!-- Add more navigation links as needed -->
   </ul>

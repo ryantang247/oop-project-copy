@@ -21,7 +21,7 @@
 
         <div class="mb-2">
           <!--Note that selected-options is defined in Dropdown to emit data-->
-          <Dropdown id="dropdown1" @selected-options="handleSelectedOptions"/>
+          <Dropdown id="dropdown1" :hierarchicalData="hierarchicalData" @selected-options="handleSelectedOptions"/>
         </div>
 
         <div class="text-center">
@@ -42,27 +42,84 @@
 
 <script>
 
+import axios from "axios";
+
 export default {
   name: 'DormForm',
+  build: {
+    extend(config, { isClient }) {
+      // Extend only webpack config for client-bundle
+      if (isClient) {
+        config.devtool = 'source-map'
+      }
+    }
+  },
   data() {
     return {
+      APIFormData: '',
+      hierarchicalData: [],
       formData: {
         academicPosition: '',
         selectedOption: {},
 
+      },
+      devServer: {
+        devServer: {
+          proxy: {
+            '/login': {
+              target: 'http://8.138.105.61/api/', // Replace with your Spring server address
+              ws: true,
+            },
+          },
+        },
       },
       submitted: false,
       showForm: false,
       uniqueFormKey: "submit-form"
     };
   },
+
   mounted() {
     // Set showForm to true after the component has been mounted
     setTimeout(() => {
+      axios.get('http://8.138.105.61/api/dorm-room/')
+        .then(response => {
+          // Handle successful response
+          this.APIFormData = response.data;
+          this.APIFormData.forEach(item => {
+            const { id,zone, building, type, floor, roomNumber } = item;
+
+            if (!this.hierarchicalData[zone]) {
+              this.hierarchicalData[zone] = {};
+            }
+            if (!this.hierarchicalData[zone][building]) {
+              this.hierarchicalData[zone][building] = {};
+            }
+
+            if (!this.hierarchicalData[zone][building][floor]) {
+              this.hierarchicalData[zone][building][floor] = [];
+            }
+
+            this.hierarchicalData[zone][building][floor].push({
+              id, roomNumber, type
+            })
+            console.log(this.hierarchicalData)
+
+
+          });
+          console.log(this.hierarchicalData)
+          this.error = null;
+        })
+        .catch(error => {
+          // Handle error
+          this.APIFormData = '';
+          this.error = error.message || 'An error occurred';
+        });
       this.showForm = true;
     }, 1000);
   },
   methods: {
+
     handleSelectedOptions(options) {
       this.formData.selectedOption =options
       // Handle the selected options received from the child component
