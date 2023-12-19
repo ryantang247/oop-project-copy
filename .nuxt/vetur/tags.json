@@ -1,0 +1,47 @@
+{
+  "AMap3D": {
+    "description": "Auto imported from components/AMap3D.vue"
+  },
+  "AMapTest": {
+    "description": "Auto imported from components/AMapTest.vue"
+  },
+  "ButtonGrids": {
+    "description": "Auto imported from components/ButtonGrids.vue"
+  },
+  "Choose": {
+    "description": "Auto imported from components/choose.vue"
+  },
+  "CommentSection": {
+    "description": "Auto imported from components/CommentSection.vue"
+  },
+  "DormFilter": {
+    "description": "Auto imported from components/DormFilter.vue"
+  },
+  "DormForm": {
+    "description": "Auto imported from components/DormForm.vue"
+  },
+  "Dropdown": {
+    "description": "Auto imported from components/Dropdown.vue"
+  },
+  "Header": {
+    "description": "Auto imported from components/Header.vue"
+  },
+  "RoomDisplay": {
+    "description": "Auto imported from components/RoomDisplay.vue"
+  },
+  "SamplrTest": {
+    "description": "Auto imported from components/SamplrTest.vue"
+  },
+  "SelectGroup": {
+    "description": "Auto imported from components/selectGroup.vue"
+  },
+  "SelectPage": {
+    "description": "Auto imported from components/Select_page.vue"
+  },
+  "SliderCust": {
+    "description": "Auto imported from components/SliderCust.vue"
+  },
+  "SmplrTest2": {
+    "description": "Auto imported from components/SmplrTest2.vue"
+  }
+}

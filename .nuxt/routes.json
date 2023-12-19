@@ -1,0 +1,58 @@
+[
+  {
+    "name": "CampusMap",
+    "path": "/CampusMap",
+    "component": "C:\\\\Users\\\\Asus\\\\Desktop\\\\oop-project-copy\\\\pages\\\\CampusMap.vue",
+    "chunkName": "pages/CampusMap",
+    "_name": "_8b0738b0"
+  },
+  {
+    "name": "Dorm",
+    "path": "/Dorm",
+    "component": "C:\\\\Users\\\\Asus\\\\Desktop\\\\oop-project-copy\\\\pages\\\\Dorm.vue",
+    "chunkName": "pages/Dorm",
+    "_name": "_2be3dc2b"
+  },
+  {
+    "name": "DormView",
+    "path": "/DormView",
+    "component": "C:\\\\Users\\\\Asus\\\\Desktop\\\\oop-project-copy\\\\pages\\\\DormView.vue",
+    "chunkName": "pages/DormView",
+    "_name": "_12389ef0"
+  },
+  {
+    "name": "Group",
+    "path": "/Group",
+    "component": "C:\\\\Users\\\\Asus\\\\Desktop\\\\oop-project-copy\\\\pages\\\\Group.vue",
+    "chunkName": "pages/Group",
+    "_name": "_91042aac"
+  },
+  {
+    "name": "login",
+    "path": "/login",
+    "component": "C:\\\\Users\\\\Asus\\\\Desktop\\\\oop-project-copy\\\\pages\\\\login.vue",
+    "chunkName": "pages/login",
+    "_name": "_31f63eb4"
+  },
+  {
+    "name": "Map",
+    "path": "/Map",
+    "component": "C:\\\\Users\\\\Asus\\\\Desktop\\\\oop-project-copy\\\\pages\\\\Map.vue",
+    "chunkName": "pages/Map",
+    "_name": "_5429e872"
+  },
+  {
+    "name": "person",
+    "path": "/person",
+    "component": "C:\\\\Users\\\\Asus\\\\Desktop\\\\oop-project-copy\\\\pages\\\\person.vue",
+    "chunkName": "pages/person",
+    "_name": "_bfdf6ecc"
+  },
+  {
+    "name": "index",
+    "path": "/",
+    "component": "C:\\\\Users\\\\Asus\\\\Desktop\\\\oop-project-copy\\\\pages\\\\index.vue",
+    "chunkName": "pages/index",
+    "_name": "_684e9b9d"
+  }
+]

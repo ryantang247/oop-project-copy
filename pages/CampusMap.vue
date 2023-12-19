@@ -18,9 +18,6 @@ export default{
 
     }
   },
-  components: {
-    PopupWindow,
-  },
   methods: {
     handleDormChange(dormArea, dormBuilding) {
       this.selectedData.DormArea = dormArea;
