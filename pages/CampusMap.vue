@@ -19,7 +19,7 @@ export default{
     }
   },
   components: {
-    PopupWindow,
+
   },
   methods: {
     handleDormChange(dormArea, dormBuilding) {
