@@ -2,57 +2,64 @@
   {
     "name": "CampusMap",
     "path": "/CampusMap",
-    "component": "C:\\\\Users\\\\Asus\\\\Desktop\\\\oop-project-copy\\\\pages\\\\CampusMap.vue",
+    "component": "C:\\\\Users\\\\Asus\\\\Desktop\\\\oop-project\\\\OOAD\\\\pages\\\\CampusMap.vue",
     "chunkName": "pages/CampusMap",
-    "_name": "_8b0738b0"
+    "_name": "_c1d7c982"
   },
   {
     "name": "Dorm",
     "path": "/Dorm",
-    "component": "C:\\\\Users\\\\Asus\\\\Desktop\\\\oop-project-copy\\\\pages\\\\Dorm.vue",
+    "component": "C:\\\\Users\\\\Asus\\\\Desktop\\\\oop-project\\\\OOAD\\\\pages\\\\Dorm.vue",
     "chunkName": "pages/Dorm",
-    "_name": "_2be3dc2b"
+    "_name": "_73ff8234"
   },
   {
     "name": "DormView",
     "path": "/DormView",
-    "component": "C:\\\\Users\\\\Asus\\\\Desktop\\\\oop-project-copy\\\\pages\\\\DormView.vue",
+    "component": "C:\\\\Users\\\\Asus\\\\Desktop\\\\oop-project\\\\OOAD\\\\pages\\\\DormView.vue",
     "chunkName": "pages/DormView",
-    "_name": "_12389ef0"
+    "_name": "_0edfcf0e"
   },
   {
     "name": "Group",
     "path": "/Group",
-    "component": "C:\\\\Users\\\\Asus\\\\Desktop\\\\oop-project-copy\\\\pages\\\\Group.vue",
+    "component": "C:\\\\Users\\\\Asus\\\\Desktop\\\\oop-project\\\\OOAD\\\\pages\\\\Group.vue",
     "chunkName": "pages/Group",
-    "_name": "_91042aac"
+    "_name": "_72d705c1"
   },
   {
     "name": "login",
     "path": "/login",
-    "component": "C:\\\\Users\\\\Asus\\\\Desktop\\\\oop-project-copy\\\\pages\\\\login.vue",
+    "component": "C:\\\\Users\\\\Asus\\\\Desktop\\\\oop-project\\\\OOAD\\\\pages\\\\login.vue",
     "chunkName": "pages/login",
-    "_name": "_31f63eb4"
+    "_name": "_25614c6a"
   },
   {
     "name": "Map",
     "path": "/Map",
-    "component": "C:\\\\Users\\\\Asus\\\\Desktop\\\\oop-project-copy\\\\pages\\\\Map.vue",
+    "component": "C:\\\\Users\\\\Asus\\\\Desktop\\\\oop-project\\\\OOAD\\\\pages\\\\Map.vue",
     "chunkName": "pages/Map",
-    "_name": "_5429e872"
+    "_name": "_d3a3fec4"
   },
   {
     "name": "person",
     "path": "/person",
-    "component": "C:\\\\Users\\\\Asus\\\\Desktop\\\\oop-project-copy\\\\pages\\\\person.vue",
+    "component": "C:\\\\Users\\\\Asus\\\\Desktop\\\\oop-project\\\\OOAD\\\\pages\\\\person.vue",
     "chunkName": "pages/person",
-    "_name": "_bfdf6ecc"
+    "_name": "_4fda9063"
+  },
+  {
+    "name": "ViewDorm",
+    "path": "/ViewDorm",
+    "component": "C:\\\\Users\\\\Asus\\\\Desktop\\\\oop-project\\\\OOAD\\\\pages\\\\ViewDorm.vue",
+    "chunkName": "pages/ViewDorm",
+    "_name": "_6dd570f9"
   },
   {
     "name": "index",
     "path": "/",
-    "component": "C:\\\\Users\\\\Asus\\\\Desktop\\\\oop-project-copy\\\\pages\\\\index.vue",
+    "component": "C:\\\\Users\\\\Asus\\\\Desktop\\\\oop-project\\\\OOAD\\\\pages\\\\index.vue",
     "chunkName": "pages/index",
-    "_name": "_684e9b9d"
+    "_name": "_23a7b6b4"
   }
 ]

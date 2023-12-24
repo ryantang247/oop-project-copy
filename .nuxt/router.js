@@ -4,14 +4,15 @@ import { normalizeURL, decode } from 'ufo'
 import { interopDefault } from './utils'
 import scrollBehavior from './router.scrollBehavior.js'
 
-const _8b0738b0 = () => interopDefault(import('..\\pages\\CampusMap.vue' /* webpackChunkName: "pages/CampusMap" */))
-const _2be3dc2b = () => interopDefault(import('..\\pages\\Dorm.vue' /* webpackChunkName: "pages/Dorm" */))
-const _12389ef0 = () => interopDefault(import('..\\pages\\DormView.vue' /* webpackChunkName: "pages/DormView" */))
-const _91042aac = () => interopDefault(import('..\\pages\\Group.vue' /* webpackChunkName: "pages/Group" */))
-const _31f63eb4 = () => interopDefault(import('..\\pages\\login.vue' /* webpackChunkName: "pages/login" */))
-const _5429e872 = () => interopDefault(import('..\\pages\\Map.vue' /* webpackChunkName: "pages/Map" */))
-const _bfdf6ecc = () => interopDefault(import('..\\pages\\person.vue' /* webpackChunkName: "pages/person" */))
-const _684e9b9d = () => interopDefault(import('..\\pages\\index.vue' /* webpackChunkName: "pages/index" */))
+const _c1d7c982 = () => interopDefault(import('..\\pages\\CampusMap.vue' /* webpackChunkName: "pages/CampusMap" */))
+const _73ff8234 = () => interopDefault(import('..\\pages\\Dorm.vue' /* webpackChunkName: "pages/Dorm" */))
+const _0edfcf0e = () => interopDefault(import('..\\pages\\DormView.vue' /* webpackChunkName: "pages/DormView" */))
+const _72d705c1 = () => interopDefault(import('..\\pages\\Group.vue' /* webpackChunkName: "pages/Group" */))
+const _25614c6a = () => interopDefault(import('..\\pages\\login.vue' /* webpackChunkName: "pages/login" */))
+const _d3a3fec4 = () => interopDefault(import('..\\pages\\Map.vue' /* webpackChunkName: "pages/Map" */))
+const _4fda9063 = () => interopDefault(import('..\\pages\\person.vue' /* webpackChunkName: "pages/person" */))
+const _6dd570f9 = () => interopDefault(import('..\\pages\\ViewDorm.vue' /* webpackChunkName: "pages/ViewDorm" */))
+const _23a7b6b4 = () => interopDefault(import('..\\pages\\index.vue' /* webpackChunkName: "pages/index" */))
 
 const emptyFn = () => {}
 
@@ -26,35 +27,39 @@ export const routerOptions = {
 
   routes: [{
     path: "/CampusMap",
-    component: _8b0738b0,
+    component: _c1d7c982,
     name: "CampusMap"
   }, {
     path: "/Dorm",
-    component: _2be3dc2b,
+    component: _73ff8234,
     name: "Dorm"
   }, {
     path: "/DormView",
-    component: _12389ef0,
+    component: _0edfcf0e,
     name: "DormView"
   }, {
     path: "/Group",
-    component: _91042aac,
+    component: _72d705c1,
     name: "Group"
   }, {
     path: "/login",
-    component: _31f63eb4,
+    component: _25614c6a,
     name: "login"
   }, {
     path: "/Map",
-    component: _5429e872,
+    component: _d3a3fec4,
     name: "Map"
   }, {
     path: "/person",
-    component: _bfdf6ecc,
+    component: _4fda9063,
     name: "person"
   }, {
+    path: "/ViewDorm",
+    component: _6dd570f9,
+    name: "ViewDorm"
+  }, {
     path: "/",
-    component: _684e9b9d,
+    component: _23a7b6b4,
     name: "index"
   }],
 
