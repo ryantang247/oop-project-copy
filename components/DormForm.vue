@@ -95,7 +95,7 @@ export default {
   mounted() {
     // Set showForm to true after the component has been mounted
     setTimeout(() => {
-      axios.get('http://8.138.105.61/api/dorm-room/')
+      axios.get('https://backend.susdorm.online/api/dorm-room/')
         .then(response => {
           // Handle successful response
           this.APIFormData = response.data;
