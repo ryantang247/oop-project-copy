@@ -53,7 +53,7 @@ export default {
       axios.post('https://backend.susdorm.online/api/login/', this.loginForm)
         .then(response => {
           // 处理响应
-          this.$cookies.set('sessionid', response.data, '7d',null,null,true,'None');
+          // this.$cookies.set('sessionid', response.data, '7d',null,null,true,'None');
           this.$router.replace('/person');
         })
         .catch(error => {

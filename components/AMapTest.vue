@@ -55,7 +55,7 @@ export default {
     window._AMapSecurityConfig = {
       securityJsCode:'6dcf279b3051f93ca87a74cf70cca816',
     }
-    axios.get('http://8.138.105.61/api/builds/')
+    axios.get('https://backend.susdorm.online/api/builds/')
       .then(response => {
         this.APIFormData = response.data;
         this.APIFormData.forEach(item => {
