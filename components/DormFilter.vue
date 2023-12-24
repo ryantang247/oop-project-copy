@@ -7,22 +7,39 @@
         <el-col :span="2">
           <h3>Location:</h3>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="4">
           <el-radio-group v-if="this.hierarchicalData" v-model="locationFilter" @change="handleLocationChange">
             <el-radio v-for="location in Object.keys(this.hierarchicalData)" :key="location" :label="location">{{location}}</el-radio>
           </el-radio-group>
+        </el-col>
+        <el-col :span="3">
+        <h3>Selection Date</h3>
+        </el-col>
+        <el-col :span="8">
+          <div class="demo-date-picker">
+
+              <el-date-picker
+                v-model="timeRange"
+                type="daterange"
+                range-separator="To"
+                start-placeholder="Start date"
+                end-placeholder="End date"
+                :size="size"
+              />
+
+          </div>
         </el-col>
       </el-row>
       </div>
 
     <el-row >
 
-      <el-col v-if="locationFilter && this.hierarchicalData[locationFilter]" :span="12">
+      <el-col v-if="locationFilter && this.hierarchicalData[locationFilter]" :span="10">
         <el-row>
           <el-col :span="4">
             <h3>Building:</h3>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="6">
             <el-select value="building" v-model="filterBuilding" id="filterBuilding" value-key="id" placeholder="Select Building">
               <el-option
                 v-for="option in Object.keys(this.hierarchicalData[locationFilter])"
@@ -35,12 +52,12 @@
         </el-row>
       </el-col>
 
-      <el-col v-else :span="12">
+      <el-col v-else :span="8">
         <el-row>
           <el-col :span="4">
             <h3>Building:</h3>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="6">
             <el-select value="" id="filterBuilding" value-key="id" placeholder="Select Floor">
               <el-option
                 v-for="option in []"
@@ -48,6 +65,15 @@
             </el-select>
           </el-col>
         </el-row>
+      </el-col>
+      <el-col :span="3">
+        <h3>Student Type</h3>
+      </el-col>
+      <el-col :span="6">
+        <el-radio-group v-model="studentType">
+          <el-radio value="masters" :label="1">Masters</el-radio>
+          <el-radio value="doctoral" :label="2">Doctoral</el-radio>
+        </el-radio-group>
       </el-col>
 
       <el-col v-if="this.hierarchicalData[locationFilter] && this.hierarchicalData[locationFilter][filterBuilding] && locationFilter && filterBuilding" :span="12">
@@ -132,6 +158,14 @@ export default {
       }
     }
   },
+  // devServer: {
+  //   proxy: {
+  //     '/api': {
+  //       target: 'http://8.138.105.61',  // Replace with your Django server URL
+  //       changeOrigin: true,
+  //     },
+  //   },
+  // },
 
   props:{
     receivedZone: null,
@@ -157,6 +191,9 @@ export default {
         console.log("Unable to filter")
       }
     },
+    timeRange: function (newVal, oldVal) {
+      console.log("Time picked: ",newVal)
+    }
 
   },
   data() {
@@ -166,10 +203,12 @@ export default {
       filteredData: [],
       filterBuilding: null,
       locationFilter: null,
+      timeRange: null,
       floorFilter: null,
       floorNumber: 0,
       showForm: false,
       gender: null,
+      studentType: null,
       roomType: {
         single_room: ref(true),
         quadruple_room: ref(true),
@@ -218,6 +257,9 @@ export default {
 
               const isGenderMatch = this.gender=== null || currentRoomGender === this.gender;
 
+              const isDateMatch = this.timeRange===null || (new Date(this.timeRange[0]) >= new Date(room.start) && new Date(this.timeRange[1]) <=new Date(room.end))
+              const isDegreeMatch = this.studentType===null || this.studentType === room.degree
+
               const isSingleMatch = this.roomType.single_room && room.type === 'single_room';
               const isDoubleMatch = this.roomType.double_room && room.type === 'double_room';
               const isQuadrupleMatch = this.roomType.quadruple_room && room.type === 'quadruple_room';
@@ -225,15 +267,47 @@ export default {
               // Combine the room type conditions using logical OR
               const isRoomTypeMatch = isSingleMatch || isDoubleMatch || isQuadrupleMatch;
 
-              if (isGenderMatch && isRoomTypeMatch) {
-                // If all filters match, add the room to filteredData
+              // console.log(new Date(this.timeRange[0]))
+              // console.log(new Date(this.timeRange[1]))
+              // console.log(new Date(room.start))
+              // console.log(new Date(room.end))
+              // console.log(new Date(this.timeRange[0]) >= new Date(room.start))
+
+              if (isGenderMatch && isRoomTypeMatch && isDateMatch && isDegreeMatch) {
+                // If all filters match, add `the room to filteredData
                 filteredData[location][building][floor].push(room);
+              }else {
+                console.log("Room not put:")
+                console.log(room)
               }
             }
+            console.log("Floor length")
+            console.log(filteredData[location][building][floor].length)
+            if (filteredData[location][building][floor].length ===0){
+              delete filteredData[location][building][floor]
+            }
+
           }
+          console.log("Building Length")
+          console.log(Object.keys(filteredData[location][building]).length)
+
+          if (Object.keys(filteredData[location][building]).length === 0){
+            delete filteredData[location][building]
+          }
+
         }
+
+        if (filteredData[location].length === 0){
+          delete filteredData[location]
+        }
+
+        console.log("Newly filtered Data")
+        console.log(filteredData)
+        this.filteredData = filteredData
+
       }
-      this.filteredData = filteredData
+
+
     },
 
   },
@@ -243,7 +317,7 @@ export default {
         .then(response => {
           this.APIFormData = response.data;
           this.APIFormData.forEach(item => {
-            const { id,zone, building, type, floor, roomNumber,sex } = item;
+            const { id,zone, building, type, floor, roomNumber,sex, start, end, degree } = item;
 
             if (!this.hierarchicalData[zone]) {
               this.hierarchicalData[zone] = {};
@@ -257,7 +331,7 @@ export default {
             }
 
             this.hierarchicalData[zone][building][floor].push({
-              id, roomNumber,type,sex
+              id, roomNumber,type,sex, start,end,degree
             });
           });
 
@@ -286,6 +360,31 @@ export default {
   margin-left: 20px;
   margin-right: 20px;
 
+}
+
+.demo-date-picker {
+  display: flex;
+  width: 100%;
+  padding: 0;
+  flex-wrap: wrap;
+}
+
+.demo-date-picker .block {
+  padding: 30px 0;
+  text-align: center;
+  border-right: solid 1px;
+  flex: 1;
+}
+
+.demo-date-picker .block:last-child {
+  border-right: none;
+}
+
+.demo-date-picker .demonstration {
+  display: block;
+  color: grey;
+  font-size: 14px;
+  margin-bottom: 20px;
 }
 
 .el-radio-group{

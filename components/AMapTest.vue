@@ -12,7 +12,8 @@
       <div class="floor-plan-image">
         <div>
         <h1 class="header-style">{{ currentZone + " " +currentBuilding }}</h1>
-        <img  src="@/static/sustech/lakeside3.png" alt="@/static/sustech/lakeside3.png">
+        <img  :src="currentImage" alt="@/static/dorm/noimage.png">
+          <p>{{currentDescription}}</p>
         </div>
         <el-button @click="handleRoute">Details</el-button>
       </div>
@@ -43,7 +44,9 @@ export default {
       isLoaded: false,
       showBuilding: false,
       currentBuilding: '',
-      currentZone: ''
+      currentZone: '',
+      currentDescription: '',
+      currentImage: null
     };
   },
   mounted() {
@@ -52,11 +55,13 @@ export default {
     window._AMapSecurityConfig = {
       securityJsCode:'6dcf279b3051f93ca87a74cf70cca816',
     }
-    axios.get('http://8.138.105.61/api/buildings/')
+    axios.get('http://8.138.105.61/api/builds/')
       .then(response => {
         this.APIFormData = response.data;
         this.APIFormData.forEach(item => {
-          const { id,name,zone, xlocation,ylocation } = item
+          console.log("Received data")
+          console.log(response.data)
+          const { id,name,photo,zone, buildingDetails, xlocation,ylocation } = item
 
           var houseIcon = {
             // 图标类型，现阶段只支持 image 类型
@@ -90,6 +95,8 @@ export default {
             zIndex: 5, // Set the desired zIndex value
             visible: true,
             icon: houseIcon, // Set the desired icon
+            photo: photo,
+            buildingDetails: buildingDetails,
             text: {
               content: zone+ " " + name + " Building", // Set content to the name
               direction: 'right',
@@ -124,6 +131,8 @@ export default {
       this.showBuilding = true
       this.currentZone = curData.area
       this.currentBuilding = curData.building
+      this.currentImage = curData.photo
+      this.currentDescription = curData.buildingDetails
       console.log(curData.area, curData.building)
       // this.$emit('dorm-selected', curData.area, curData.building);
 

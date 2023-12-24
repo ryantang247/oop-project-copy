@@ -50,7 +50,7 @@
       <div style="margin: 10px; border-top: 1px solid #ccc;">
         <button @click="addComment= !addComment" style="background-color: burlywood; margin-top: 20px">{{ addComment ? 'Cancel Comment' : 'Comment' }}</button>
         <div v-if="addComment" >
-          <el-rate v-model="comment.ratings" size="large" style="margin-top: 10px"/>
+          <el-rate v-model="comment.rating" size="large" style="margin-top: 10px"/>
           <el-input v-model="comment.comment" placeholder="Type your feeling on this room!" style="margin: 10px;"/>
           <button @click="submitComment(false)" >Submit Comment</button>
         </div>
@@ -64,7 +64,7 @@
       <div style="margin: 10px; border-top: 1px solid #ccc;">
         <button @click="addComment= !addComment" style="background-color: burlywood; margin-top: 20px">{{ addComment ? 'Cancel Comment' : 'Comment' }}</button>
         <div v-if="addComment" >
-          <el-rate v-model="comment.ratings" size="large" />
+          <el-rate v-model="comment.rating" size="large" />
           <el-input v-model="comment.comment" placeholder="Type your feeling on this room!" style="margin: 10px;"/>
           <button @click="submitComment(false)" >Submit Comment</button>
         </div>
@@ -85,12 +85,21 @@ export default {
     roomId: Number, // Specify the type of roomId prop
 
   },
+  devServer: {
+    proxy: {
+      '/api': {
+        target: 'http://8.138.105.61',  // Replace with your Django server URL
+        changeOrigin: true,
+      },
+    },
+  },
   watch: {
     roomId: function (newVal, oldVal) {
       console.log('Prop changed for selectedRoomId for comment: ', newVal, ' | was: ', oldVal);
       this.getComments(); // Call getComments when roomId changes
     },
   },
+
   data() {
     return {
       commentsMap: null,
@@ -101,7 +110,7 @@ export default {
       comment:{
         user:1,
         comment: null,
-        rating: 0
+        rating: null
       },
       reply:{
         user: 1,
@@ -129,28 +138,30 @@ export default {
       if(isReply){
         params = {
           "dormitory": this.roomId,
-          "user": this.reply.user,
           "comment": this.reply.comment,
           "rating": null,
           "parent": this.reply.replyTo
+
         }
       }else {
         params = {
           "dormitory": this.roomId,
-          "user": this.comment.user,
           "comment": this.comment.comment,
           "rating": this.comment.rating,
           "parent": null
         }
       }
 
-      if((params.comment!=null && params.comment!=='') && params.user!=null && params.dormitory!=null ){
-        axios.post('http://8.138.105.61/api/create-comment/', { params })
-          .then(response => {
+      if((params.comment!=null && params.comment!=='') && params.dormitory!=null ){
+        axios.defaults.withCredentials = true;
+        axios.post('http://8.138.105.61/api/create-comment/',params,
+
+        ).then(response => {
+            this.getComments();
             console.log(response.data);
           })
       }else {
-        if(params.comment!=null || params.comment!==''){
+        if(params.comment===null || params.comment===''){
           MessageBox.alert('Please enter a valid comment.', 'Alert', {
             confirmButtonText: 'Back',
             type: 'warning'
@@ -166,6 +177,7 @@ export default {
 
 
     },
+
 
     handleClose(){
       console.log(this.commentsMap)

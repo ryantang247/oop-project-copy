@@ -1,59 +1,72 @@
 <template>
   <div>
     <!-- Iterate over locations -->
-    <div v-for="location in Object.keys(this.filteredData)">
-      <div class="title-container">
-        <el-row class="title-styles">
-          <el-col :span="2">
-            <img class="icon-style" src="@/static/dorm/location.png" alt="@/static/dorm/location.png">
-          </el-col>
-          <el-col  :span="6">
-        <h1 class="location-head-style">{{ location }}</h1>
-          </el-col>
-        </el-row>
-      </div>
-            <!-- Iterate over buildings in the current location -->
-      <div class="building-floor-style">
-            <div v-for="building in Object.keys(filteredData[location])" :key="building">
-              <h2 class="building-header">Building {{ building }}</h2>
-              <ElCarousel height='500px' arrow="always" trigger="click">
-                <ElCarouselItem v-for="floor in Object.keys(filteredData[location][building])" :key="floor">
-                  <el-row>
-                    <el-col :span="4">
-                      <h2 class="floor-header">Floor {{ floor }}</h2>
-                    </el-col>
-                    <el-col class="show-floor-plan" :span="18">
-                    <el-button @click="showFloorPlan = true">View Floor plan</el-button>
-                    </el-col>
-                  </el-row>
-                  <!-- Iterate over rooms in the current floor -->
-                  <el-row class="room-container">
-                    <el-col
-                      v-for="room in filteredData[location][building][floor]"
-                      :key="room.id"
-                      :span="4"
-                    >
-                      <el-card  :body-style="{ padding: '0px' }" >
-                        <div @click="handleComment(room.id)" class="card-content-container">
-                          <img
-                            :src="getImageSrc(room.type)"
-                            class="image"
-                            alt=""/>
-                            <h2>{{ room.roomNumber }}</h2>
-                            <h2>{{ room.type }}</h2>
-                          <p @click="handleCollect" class="collection-header">收藏</p>
+    <div v-if="filteredData.length !==0">
+      <div v-for="location in Object.keys(this.filteredData)">
+        <div class="title-container">
+          <el-row class="title-styles">
+            <el-col :span="2">
+              <img class="icon-style" src="@/static/dorm/location.png" alt="@/static/dorm/location.png">
+            </el-col>
+            <el-col  :span="6">
+          <h1 class="location-head-style">{{ location }}</h1>
+            </el-col>
+          </el-row>
+        </div>
+              <!-- Iterate over buildings in the current location -->
+        <div class="building-floor-style">
+              <div v-if="filteredData[location]" v-for="building in Object.keys(filteredData[location])" :key="building">
+                <div>
+                <h2 class="building-header">Building {{ building }}</h2>
+                <ElCarousel height='500px' arrow="always" trigger="click">
+                  <ElCarouselItem v-for="floor in Object.keys(filteredData[location][building])" :key="floor">
+                    <div>
+                    <el-row>
+                      <el-col :span="4">
+                        <h2 class="floor-header">Floor {{ floor }}</h2>
+                      </el-col>
+                      <el-col class="show-floor-plan" :span="18">
+                      <el-button @click="showFloorPlan = true">View Floor plan</el-button>
+                      </el-col>
+                    </el-row>
+                    <!-- Iterate over rooms in the current floor -->
+                    <el-row class="room-container">
+                      <el-col
 
-                        </div>
-                      </el-card>
-                    </el-col>
-                  </el-row>
-                </ElCarouselItem>
-              </ElCarousel>
-            </div>
-      </div>
+                        v-for="room in filteredData[location][building][floor]"
+                        :key="room.id"
+                        :span="4"
+                      >
+                        <el-card  :body-style="{ padding: '0px' }" >
+                          <div  class="card-content-container">
+                            <img
+                              @click="handleComment(room.id)"
+                              :src="getImageSrc(room.type)"
+                              class="image"
+                              alt=""/>
+                              <h2>{{ room.roomNumber }}</h2>
+                              <h2>{{ room.type }}</h2>
+                            <p @click="collectRoom(room.id)" class="collection-header">收藏</p>
+
+                          </div>
+                        </el-card>
+                      </el-col>
+                    </el-row>
+                    </div>
+                  </ElCarouselItem>
+                </ElCarousel>
+                  </div>
+              </div>
+
+        </div>
     </div>
+    </div>
+    <div v-else>
+      <p class="desc">No results :(</p>
+    </div>
+
     <CommentSection  @closeComment="handleReceiveComment" :dialogVisible="this.showComment" :room-id="this.roomId"/>
-    <el-dialog  :visible.sync="showFloorPlan"   :close-on-click-modal="true"
+    <el-dialog  :visible.sync="showFloorPlan" :close-on-click-modal="true"
                 :close-on-press-escape="true"
                 :before-close="handleCloseFloorPlan">
       <div class="floor-plan-image">
@@ -62,10 +75,15 @@
       </div>
 
     </el-dialog>
+
+
   </div>
 </template>
 
 <script>
+import axios from "axios";
+import {MessageBox} from "element-ui";
+
 export default {
   name: 'RoomDisplay',
   props: {
@@ -79,13 +97,15 @@ export default {
       data: this.filteredData,
       roomId: null,
       showComment: false,
-      showFloorPlan:false
+      showFloorPlan:false,
+      showGroups: false,
+      displayRoom: true
     };
   },
   watch: {
     filteredData: function (newVal, oldVal) {
       // Log the changes to the console
-      console.log('Prop changed for filtered Data: ', newVal, ' | was: ', oldVal);
+      console.log('Prop changed for filtered Data: ', newVal, ' old data was: ', oldVal);
       console.log(newVal)
 
       // Use the new value in the component
@@ -95,6 +115,11 @@ export default {
       // For example, update some internal state or trigger a method
       this.handleDataChange(newVal);
     },
+  },
+  computed:{
+    handleRoom(){
+
+    }
   },
   methods: {
     handleCloseFloorPlan(done) {
@@ -110,6 +135,32 @@ export default {
     handleReceiveComment(){
       this.showComment = false
     },
+    collectRoom(roomID){
+      axios.post('http://8.138.105.61/api/book-dorm/',{id: roomID}
+        //   {
+        //   headers: headers
+        // }
+
+      ).then(response => {
+        MessageBox.alert('Room successfully collected to user！.', 'Alert', {
+            confirmButtonText: 'Back',
+            type: 'warning'
+          }
+        );
+      })
+
+
+    },
+
+    // hasBuilding(location,building){
+    //   return this.filteredData[location][building][floor].length !== 0;
+    // },
+    //
+    // hasRooms(location,building,floor){
+    //   return this.filteredData[location][building][floor].length !== 0;
+    //
+    // },
+
     handleComment(roomId){
       console.log("selected Room",roomId)
       this.showComment = true,
@@ -203,6 +254,10 @@ export default {
   display: inline-block; /* Ensure the underline only spans the width of the text */
   margin-top: 20px;
   margin-bottom: 20px; /* Add some space between the text and the underline */
+}
+
+.desc{
+  text-align: center;
 }
 
 .floor-header{

@@ -19,6 +19,7 @@
     "vercel": "^33.0.0",
     "vue": "^2.7.10",
     "vue-cookie": "^1.1.4",
+    "vue-cookies": "^1.8.3",
     "vue-server-renderer": "^2.7.10",
     "vue-template-compiler": "^2.7.10",
     "vuex": "^3.6.2"
